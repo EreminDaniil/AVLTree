@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 
 class Node 
 {
@@ -219,7 +220,7 @@ void PrintTree(Node* Root, std::string Indent, bool Last)
 	}
 }
 
-void AddRandomValue(Node* Root)
+void TestAddValueAndTime(Node* Root)
 {
 	srand(time(nullptr));
 	int RandomNum = rand() % 100;
@@ -229,12 +230,13 @@ void AddRandomValue(Node* Root)
 		RandomNum = rand() % 100;
 	}
 	PrintTree(Root, "", true);
+	std::cout<<std::endl << "Runtime= " << clock() / 1000.0 <<" ms" << std::endl;
 }
 
 int main() 
 {
 	Node* Root = nullptr;
-	AddRandomValue(Root);
+	TestAddValueAndTime(Root);
 	//std::cout << "After deleting " << std::endl;
 	//PrintTree(Root, "", true);
 }
