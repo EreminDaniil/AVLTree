@@ -206,12 +206,12 @@ void PrintTree(Node* Root, std::string Indent, bool Last)
 		if (Last) 
 		{
 			std::cout << "R----";
-			Indent += "   ";
+			Indent = Indent + "   ";
 		}
 		else 
 		{
 			std::cout << "L----";
-			Indent += "|  ";
+			Indent = Indent + "|  ";
 		}
 		std::cout << Root->Key << std::endl;
 		PrintTree(Root->Left, Indent, false);
@@ -219,19 +219,22 @@ void PrintTree(Node* Root, std::string Indent, bool Last)
 	}
 }
 
+void AddRandomValue(Node* Root)
+{
+	srand(time(nullptr));
+	int RandomNum = rand() % 100;
+	while (RandomNum != 0)
+	{
+		Root = InsertNode(Root, rand() % 100);
+		RandomNum = rand() % 100;
+	}
+	PrintTree(Root, "", true);
+}
+
 int main() 
 {
 	Node* Root = nullptr;
-	Root = InsertNode(Root, 33);
-	Root = InsertNode(Root, 13);
-	Root = InsertNode(Root, 53);
-	Root = InsertNode(Root, 9);
-	Root = InsertNode(Root, 21);
-	Root = InsertNode(Root, 61);
-	Root = InsertNode(Root, 8);
-	Root = InsertNode(Root, 11);
-	PrintTree(Root, "", true);
-	Root = DeleteNode(Root, 13);
-	std::cout << "After deleting " << std::endl;
-	PrintTree(Root, "", true);
+	AddRandomValue(Root);
+	//std::cout << "After deleting " << std::endl;
+	//PrintTree(Root, "", true);
 }
