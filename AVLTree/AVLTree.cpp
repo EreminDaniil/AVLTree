@@ -1,18 +1,19 @@
 #include <iostream>
+#include "AVLTree.h"
 #include <ctime>
 
-class Node 
+
+UAVLTree::UAVLTree()
 {
-public:
-	int Key;
-	Node* Left;
-	Node* Right;
-	int Height;
-};
+	Root = nullptr;
+}
 
-int Max(int LeftUnderTree, int RightUnderTree);
+UAVLTree::~UAVLTree()
+{
+	DeleteNode(Root, 0);
+}
 
-int Height(Node* NewHeight) 
+int UAVLTree::Height(FNode* NewHeight)
 {
 	if (NewHeight == nullptr)
 	{
@@ -21,7 +22,7 @@ int Height(Node* NewHeight)
 	return NewHeight->Height;
 }
 
-int Max(int LeftUnderTree, int RightUnderTree) 
+int UAVLTree::Max(int LeftUnderTree, int RightUnderTree)
 {
 	if (LeftUnderTree > RightUnderTree)
 	{
@@ -33,9 +34,9 @@ int Max(int LeftUnderTree, int RightUnderTree)
 	}
 }
 
-Node* NewNode(int Key) 
+FNode* UAVLTree::NewNode(int Key)
 {
-	Node* Nodes = new Node();
+	FNode* Nodes = new FNode();
 	Nodes->Key = Key;
 	Nodes->Left = nullptr;
 	Nodes->Right = nullptr;
@@ -43,10 +44,10 @@ Node* NewNode(int Key)
 	return (Nodes);
 }
 
-Node* RightRotate(Node* NewRight) 
+FNode* UAVLTree::RightRotate(FNode* NewRight)
 {
-	Node* NewLeft = NewRight->Left;
-	Node* Revert = NewLeft->Right;
+	FNode* NewLeft = NewRight->Left;
+	FNode* Revert = NewLeft->Right;
 	NewLeft->Right = NewRight;
 	NewRight->Left = Revert;
 	NewRight->Height = Max(Height(NewRight->Left), Height(NewRight->Right)) + 1;
@@ -54,10 +55,10 @@ Node* RightRotate(Node* NewRight)
 	return NewLeft;
 }
 
-Node* LeftRotate(Node* NewLeft) 
+FNode* UAVLTree::LeftRotate(FNode* NewLeft)
 {
-	Node* NewRight = NewLeft->Right;
-	Node* Revert = NewRight->Left;
+	FNode* NewRight = NewLeft->Right;
+	FNode* Revert = NewRight->Left;
 	NewRight->Left = NewLeft;
 	NewLeft->Right = Revert;
 	NewLeft->Height = Max(Height(NewLeft->Left), Height(NewLeft->Right)) + 1;
@@ -65,7 +66,7 @@ Node* LeftRotate(Node* NewLeft)
 	return NewRight;
 }
 
-int GetBalanceFactor(Node* AddNode) 
+int UAVLTree::GetBalanceFactor(FNode* AddNode)
 {
 	if (AddNode == nullptr)
 	{
@@ -74,7 +75,7 @@ int GetBalanceFactor(Node* AddNode)
 	return Height(AddNode->Left) - Height(AddNode->Right);
 }
 
-Node* InsertNode(Node* AddNode, int Key) 
+FNode* UAVLTree::InsertNode(FNode* AddNode, int Key)
 {
 	if (AddNode == nullptr)
 	{
@@ -121,15 +122,15 @@ Node* InsertNode(Node* AddNode, int Key)
 	return AddNode;
 }
 
-Node* NodeWithMimumValue(Node* AddNode) 
+FNode* UAVLTree::NodeWithMimumValue(FNode* AddNode)
 {
-	Node* Current = AddNode;
+	FNode* Current = AddNode;
 	while (Current->Left != nullptr)
 		Current = Current->Left;
 	return Current;
 }
 
-Node* DeleteNode(Node* Root, int Key) 
+FNode* UAVLTree::DeleteNode(FNode* Root, int Key)
 {
 	if (Root == nullptr)
 	{
@@ -147,7 +148,7 @@ Node* DeleteNode(Node* Root, int Key)
 	{
 		if ((Root->Left == nullptr) || (Root->Right == nullptr)) 
 		{
-			Node* Temp = Root->Left ? Root->Left : Root->Right;
+			FNode* Temp = Root->Left ? Root->Left : Root->Right;
 			if (Temp == nullptr) 
 			{
 				Temp = Root;
@@ -161,7 +162,7 @@ Node* DeleteNode(Node* Root, int Key)
 		}
 		else 
 		{
-			Node* Temp = NodeWithMimumValue(Root->Right);
+			FNode* Temp = NodeWithMimumValue(Root->Right);
 			Root->Key = Temp->Key;
 			Root->Right = DeleteNode(Root->Right, Temp->Key);
 		}
@@ -199,7 +200,7 @@ Node* DeleteNode(Node* Root, int Key)
 	return Root;
 }
 
-void PrintTree(Node* Root, std::string Indent, bool Last) 
+void UAVLTree::PrintTree(FNode* Root, std::string Indent, bool Last)
 {
 	if (Root != nullptr) 
 	{
@@ -220,7 +221,7 @@ void PrintTree(Node* Root, std::string Indent, bool Last)
 	}
 }
 
-void TestAddValueAndTime(Node* Root)
+void UAVLTree::TestAddValueAndTime(FNode* Root)
 {
 	srand(time(nullptr));
 	int RandomNum = rand() % 100;
@@ -235,8 +236,7 @@ void TestAddValueAndTime(Node* Root)
 
 int main() 
 {
-	Node* Root = nullptr;
-	TestAddValueAndTime(Root);
-	//std::cout << "After deleting " << std::endl;
-	//PrintTree(Root, "", true);
+	UAVLTree* Tree = new UAVLTree();
+	FNode* Root = nullptr;
+	Tree->TestAddValueAndTime(Root);
 }
