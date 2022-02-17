@@ -224,14 +224,19 @@ void UAVLTree::PrintTree(FNode* Root, std::string Indent, bool Last)
 void UAVLTree::TestAddValueAndTime(FNode* Root)
 {
 	srand(time(nullptr));
-	int RandomNum = rand() % 100;
-	while (RandomNum != 0)
+	int RandomNum = 1100;
+	for (int i = 0; i < RandomNum; i++)
 	{
-		Root = InsertNode(Root, rand() % 100);
-		RandomNum = rand() % 100;
+		Root = InsertNode(Root, rand() % RandomNum);
 	}
 	PrintTree(Root, "", true);
 	std::cout<<std::endl << "Runtime= " << clock() / 1000.0 <<" ms" << std::endl;
+	InsertNode(Root, 1000);
+	PrintTree(Root, "", true);
+	std::cout << std::endl << "Runtime= " << clock() / 1000.0 << " ms" << std::endl;
+	DeleteNode(Root, 1000);
+	PrintTree(Root, "", true);
+	std::cout << std::endl << "Runtime= " << clock() / 1000.0 << " ms" << std::endl;
 }
 
 int main() 
