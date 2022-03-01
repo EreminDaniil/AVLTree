@@ -3,17 +3,17 @@
 #include <ctime>
 
 
-UAVLTree::UAVLTree()
+FAVLTree::FAVLTree()
 {
 	Root = nullptr;
 }
 
-UAVLTree::~UAVLTree()
+FAVLTree::~FAVLTree()
 {
 	DeleteNode(Root, 0);
 }
 
-int UAVLTree::Height(FNode* NewHeight)
+int FAVLTree::Height(FNode* NewHeight)
 {
 	if (NewHeight == nullptr)
 	{
@@ -22,7 +22,7 @@ int UAVLTree::Height(FNode* NewHeight)
 	return NewHeight->Height;
 }
 
-int UAVLTree::Max(int LeftUnderTree, int RightUnderTree)
+int FAVLTree::Max(int LeftUnderTree, int RightUnderTree)
 {
 	if (LeftUnderTree > RightUnderTree)
 	{
@@ -34,7 +34,7 @@ int UAVLTree::Max(int LeftUnderTree, int RightUnderTree)
 	}
 }
 
-FNode* UAVLTree::NewNode(int Key)
+FNode* FAVLTree::NewNode(int Key)
 {
 	FNode* Nodes = new FNode();
 	Nodes->Key = Key;
@@ -44,7 +44,7 @@ FNode* UAVLTree::NewNode(int Key)
 	return (Nodes);
 }
 
-FNode* UAVLTree::RightRotate(FNode* NewRight)
+FNode* FAVLTree::RightRotate(FNode* NewRight)
 {
 	FNode* NewLeft = NewRight->Left;
 	FNode* Revert = NewLeft->Right;
@@ -55,7 +55,7 @@ FNode* UAVLTree::RightRotate(FNode* NewRight)
 	return NewLeft;
 }
 
-FNode* UAVLTree::LeftRotate(FNode* NewLeft)
+FNode* FAVLTree::LeftRotate(FNode* NewLeft)
 {
 	FNode* NewRight = NewLeft->Right;
 	FNode* Revert = NewRight->Left;
@@ -66,7 +66,7 @@ FNode* UAVLTree::LeftRotate(FNode* NewLeft)
 	return NewRight;
 }
 
-int UAVLTree::GetBalanceFactor(FNode* AddNode)
+int FAVLTree::GetBalanceFactor(FNode* AddNode)
 {
 	if (AddNode == nullptr)
 	{
@@ -75,7 +75,7 @@ int UAVLTree::GetBalanceFactor(FNode* AddNode)
 	return Height(AddNode->Left) - Height(AddNode->Right);
 }
 
-FNode* UAVLTree::InsertNode(FNode* AddNode, int Key)
+FNode* FAVLTree::InsertNode(FNode* AddNode, int Key)
 {
 	if (AddNode == nullptr)
 	{
@@ -122,7 +122,7 @@ FNode* UAVLTree::InsertNode(FNode* AddNode, int Key)
 	return AddNode;
 }
 
-FNode* UAVLTree::NodeWithMimumValue(FNode* AddNode)
+FNode* FAVLTree::NodeWithMimumValue(FNode* AddNode)
 {
 	FNode* Current = AddNode;
 	while (Current->Left != nullptr)
@@ -130,7 +130,7 @@ FNode* UAVLTree::NodeWithMimumValue(FNode* AddNode)
 	return Current;
 }
 
-FNode* UAVLTree::DeleteNode(FNode* Root, int Key)
+FNode* FAVLTree::DeleteNode(FNode* Root, int Key)
 {
 	if (Root == nullptr)
 	{
@@ -200,7 +200,7 @@ FNode* UAVLTree::DeleteNode(FNode* Root, int Key)
 	return Root;
 }
 
-void UAVLTree::PrintTree(FNode* Root, std::string Indent, bool Last)
+void FAVLTree::PrintTree(FNode* Root, std::string Indent, bool Last)
 {
 	if (Root != nullptr) 
 	{
@@ -221,27 +221,71 @@ void UAVLTree::PrintTree(FNode* Root, std::string Indent, bool Last)
 	}
 }
 
-void UAVLTree::TestAddValueAndTime(FNode* Root)
+int FAVLTree::CheckTreeHeight(FNode* Root)
+{
+	if (Root == nullptr)
+	{
+		return 0;
+	}
+	int LeftChildHeight = CheckTreeHeight(Root->Left);
+	if (LeftChildHeight == -1)
+	{
+		return -1;
+	}
+	int RightChildHeight = CheckTreeHeight(Root->Right);
+	if (RightChildHeight == -1)
+	{
+		return -1;
+	}
+	int HeightDifference = LeftChildHeight - RightChildHeight;
+	if (abs(HeightDifference) > 1)
+	{
+		return -1;
+	}
+	else
+	{
+		return Max(LeftChildHeight, RightChildHeight) + 1;
+	}
+}
+
+bool FAVLTree::IsBalance(FNode* Root)
+{
+	if (CheckTreeHeight(Root) == -1)
+	{
+		std::cout << "Tree is false" << std::endl;
+		return false;
+	}
+	else
+	{
+		std::cout << "Tree is true" << std::endl;
+		return true;
+	}
+}
+
+void FAVLTree::TestAddValueAndTime(FNode* Root)
 {
 	srand(time(nullptr));
-	int RandomNum = 1100;
+	int RandomNum = 100;
 	for (int i = 0; i < RandomNum; i++)
 	{
 		Root = InsertNode(Root, rand() % RandomNum);
 	}
 	PrintTree(Root, "", true);
+	IsBalance(Root);
 	std::cout<<std::endl << "Runtime= " << clock() / 1000.0 <<" ms" << std::endl;
-	InsertNode(Root, 1000);
-	PrintTree(Root, "", true);
-	std::cout << std::endl << "Runtime= " << clock() / 1000.0 << " ms" << std::endl;
-	DeleteNode(Root, 1000);
-	PrintTree(Root, "", true);
-	std::cout << std::endl << "Runtime= " << clock() / 1000.0 << " ms" << std::endl;
+ 	InsertNode(Root, 100);
+ 	PrintTree(Root, "", true);
+	IsBalance(Root);
+ 	std::cout << std::endl << "Runtime= " << clock() / 1000.0 << " ms" << std::endl;
+ 	DeleteNode(Root, 100);
+ 	PrintTree(Root, "", true);
+	IsBalance(Root);
+ 	std::cout << std::endl << "Runtime= " << clock() / 1000.0 << " ms" << std::endl;
 }
 
 int main() 
 {
-	UAVLTree* Tree = new UAVLTree();
+	FAVLTree* Tree = new FAVLTree();
 	FNode* Root = nullptr;
 	Tree->TestAddValueAndTime(Root);
 }

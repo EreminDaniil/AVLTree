@@ -9,11 +9,11 @@ struct FNode
 	FNode* Right;
 };
 
-class UAVLTree
+class FAVLTree
 {
 public:
-	UAVLTree();
-	~UAVLTree();
+	FAVLTree();
+	~FAVLTree();
 	FNode* NewNode(int Key);
 	FNode* RightRotate(FNode* NewRight);
 	FNode* LeftRotate(FNode* NewLeft);
@@ -25,6 +25,8 @@ public:
 	int GetBalanceFactor(FNode* AddNode);
 	void PrintTree(FNode* Root, std::string Indent, bool Last);
 	void TestAddValueAndTime(FNode* Root);
+	int CheckTreeHeight(FNode* Root);   // Checking the height of the tree
+	bool IsBalance(FNode* Root);		// Calculation and withdrawal of the balance
 private:
 	FNode* Root;
 };
